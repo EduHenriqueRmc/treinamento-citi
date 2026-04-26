@@ -143,3 +143,37 @@ export const deleteCalcados = async (req: Request, res: Response) => {
 
     }
 }
+
+//FUNÇÃO DE LEITURA POR ID 
+export const getById = async (req: Request, res: Response) => {
+
+    try{
+        const id = Number(req.params.id);
+        
+        //FUNÇÃO findUnique PARA BUSCAR APENAS UM REGISTRO 
+        const calcado = await prisma.calcado.findUnique({
+            where: {
+                id: id
+            }
+        })
+
+        //SE NENHUM CALCADO CORRESPONDE AO ID, RETORNA NULO
+        if (!calcado){
+            return res.status(404).json({
+                message: "Nenhum calçado corresponde ao id inserido"
+            })
+        }
+
+        //RETORNA O PRODUTO 
+        return res.status(200).json(calcado)
+
+    } catch (error) {
+        return res.status(400).json({
+            message: "Erro na busca",
+            error,
+        })
+    }
+
+}
+
+
